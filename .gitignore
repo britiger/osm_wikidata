@@ -1,0 +1,11 @@
+config
+cache/*
+cache_wikidata/*
+tools/osmconvert
+tools/osmupdate
+*.osm.pbf
+osmupdate_temp/*
+tmp/*
+log/*
+tools/*
+diff/last.state.txt

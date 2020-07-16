@@ -1,0 +1,10 @@
+# copy this file to config
+IMPORT_PBF=import-latest.osm.pbf
+export PGHOST=127.0.0.1
+export PGPORT=5432
+export PGUSER=osm
+export PGPASSWORD=osm
+export PGDATABASE=osm_etymology
+
+cache_dir=./cache
+diff_dir=./diff

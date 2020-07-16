@@ -1,0 +1,104 @@
+{
+    "areas": {
+        "linear_tags": [
+            "highway"
+        ]
+    },
+    "tables": {
+        "admin": {
+            "columns": [
+                {
+                    "type": "id",
+                    "name": "osm_id",
+                    "key": null
+                },
+                {
+                    "type": "geometry",
+                    "name": "geometry",
+                    "key": null
+                },
+                {
+                    "type": "string",
+                    "name": "name",
+                    "key": "name"
+                },
+                {
+                    "type": "mapping_value",
+                    "name": "boundary",
+                    "key": null
+                },
+                {
+                    "type": "integer",
+                    "name": "admin_level",
+                    "key": "admin_level"
+                }
+            ],
+            "type": "polygon",
+            "mapping": {
+                "boundary": [
+                    "administrative"
+                ]
+            },
+            "filter": {
+                "require":  {
+                    "admin_level": [
+                        "__any__"
+                    ],
+                    "name": [
+                        "__any__"
+                    ]
+                }
+            }
+        },
+        "roads": {
+            "columns": [
+                {
+                    "type": "id",
+                    "name": "osm_id",
+                    "key": null
+                },
+                {
+                    "type": "geometry",
+                    "name": "geometry",
+                    "key": null
+                },
+                {
+                    "type": "mapping_value",
+                    "name": "highway",
+                    "key": null
+                },
+                {
+                    "type": "string",
+                    "name": "name",
+                    "key": "name"
+                },
+                {
+                    "type": "string",
+                    "name": "wikidata",
+                    "key": "wikidata"
+                },
+                {
+                    "type": "string",
+                    "name": "name:etymology:wikidata",
+                    "key": "name:etymology:wikidata"
+                }
+            ],
+            "type": "geometry",
+            "type_mappings": {
+                "linestrings": {
+                     "highway": ["__any__"]
+                },
+                "polygons": {
+                     "highway": ["__any__"]
+                }
+            },
+            "filter": {
+                "require":  {
+                    "name": [
+                        "__any__"
+                    ]
+                }
+            }
+        }
+    }
+}
