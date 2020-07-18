@@ -49,3 +49,4 @@ SELECT jsonb_object_keys(data->'entities') AS wikidataId, data->'entities'->json
 FROM wikidata_import
 ON CONFLICT (wikidataId) DO UPDATE 
 SET imported=NOW(), data=excluded.data;"
+psql -c "TRUNCATE TABLE wikidata_import;"

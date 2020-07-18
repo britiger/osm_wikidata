@@ -8,4 +8,3 @@ CREATE TABLE IF NOT EXISTS wikidata (
 CREATE UNLOGGED TABLE IF NOT EXISTS wikidata_import (
     data jsonb
 );
-TRUNCATE TABLE wikidata_import;
