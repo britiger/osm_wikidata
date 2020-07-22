@@ -14,9 +14,9 @@ function db_import() {
     cat $wd_cache/${wikidata}.json | sed 's/\\/\\\\/g' | psql -c 'COPY wikidata_import FROM STDIN;'
 }
 
-psql -t -X --quiet --no-align -c "select unnest(wikidata) AS wikidata from clustered_roads WHERE wikidata IS NOT NULL 
- UNION 
- select unnest(\"name:etymology:wikidata\") AS wikidata from clustered_roads WHERE \"name:etymology:wikidata\" IS NOT NULL;" \
+psql -c "TRUNCATE TABLE wikidata_import;"
+
+psql -t -X --quiet --no-align -c "select wikidata FROM wikidata_needed_import ORDER BY wikidata" \
 | while read wikidata
 do
     # regex check
@@ -36,10 +36,12 @@ do
         if [ $RET -ne 0 ]
         then
             rm -rf $outfile
-        else
-            echo_time "Import to db ..."
-            db_import ${wikidata}
         fi
+    fi
+    if [ -f $outfile ]
+    then
+        echo_time "Import to db ..."
+        db_import ${wikidata}
     fi
 done
 
@@ -49,4 +51,3 @@ SELECT jsonb_object_keys(data->'entities') AS wikidataId, data->'entities'->json
 FROM wikidata_import
 ON CONFLICT (wikidataId) DO UPDATE 
 SET imported=NOW(), data=excluded.data;"
-psql -c "TRUNCATE TABLE wikidata_import;"
