@@ -9,3 +9,4 @@ tmp/*
 log/*
 tools/*
 diff/last.state.txt
+export_data/*

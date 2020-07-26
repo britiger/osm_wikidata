@@ -36,6 +36,8 @@ do
     then
         echo_time "Download ..."
         curl -s https://www.wikidata.org/wiki/Special:EntityData/${wikidata}.json -o $outfile
+        # TODO: Check for: Rediects
+        # TODO: Check for: 404
         RET=$?
         if [ $RET -ne 0 ]
         then

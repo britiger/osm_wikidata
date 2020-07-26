@@ -7,6 +7,9 @@ CREATE TABLE IF NOT EXISTS wikidata_classes (
 
 -- adding classification
 INSERT INTO wikidata_classes VALUES ('Q5', '{"P31","P279"}', 'human') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q2985549', '{"P31"}', 'mononymous person') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q20643955', '{"P31"}', 'human biblical figure') ON CONFLICT DO NOTHING;
+
 INSERT INTO wikidata_classes VALUES ('Q6581097', '{"P21"}', 'human (male)') ON CONFLICT DO NOTHING;
 INSERT INTO wikidata_classes VALUES ('Q15145778', '{"P21"}', 'human (male cis)') ON CONFLICT DO NOTHING;
 INSERT INTO wikidata_classes VALUES ('Q6581072', '{"P21"}', 'human (female)') ON CONFLICT DO NOTHING;

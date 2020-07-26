@@ -7,8 +7,9 @@ CREATE TABLE IF NOT EXISTS clustered_roads (
   wikidata varchar(255)[],
   geom geometry
 );
-
-CREATE INDEX ON imposm_roads (name);
+SELECT UpdateGeometrySRID('clustered_roads','geom','3857');
+CREATE INDEX IF NOT EXISTS imposm_roads_name_idx ON imposm_roads (name);
+DROP INDEX IF NOT EXISTS clustered_roads_geom_idx;
 
 DO $$DECLARE r record;
 BEGIN
@@ -43,3 +44,5 @@ BEGIN
                 GROUP BY name, cluster' USING r.name;
     END LOOP;
 END$$;
+
+CREATE INDEX IF NOT EXISTS clustered_roads_geom_idx ON clustered_roads USING GIST (geom);
