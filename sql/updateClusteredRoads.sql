@@ -5,11 +5,10 @@ CREATE TABLE IF NOT EXISTS clustered_roads (
   cluster int,
   "name:etymology:wikidata" varchar(255)[],
   wikidata varchar(255)[],
-  geom geometry
+  geom geometry(geometry, 3857)
 );
-SELECT UpdateGeometrySRID('clustered_roads','geom','3857');
 CREATE INDEX IF NOT EXISTS imposm_roads_name_idx ON imposm_roads (name);
-DROP INDEX IF NOT EXISTS clustered_roads_geom_idx;
+DROP INDEX IF EXISTS clustered_roads_geom_idx;
 
 DO $$DECLARE r record;
 BEGIN
@@ -18,6 +17,7 @@ BEGIN
 
     FOR r IN SELECT DISTINCT name FROM imposm_roads WHERE name != '' AND name IS NOT NULL
     LOOP
+        -- RAISE NOTICE 'Cluster road %', r.name;
         EXECUTE 'INSERT INTO clustered_roads 
                 SELECT array_agg(osm_id) AS osm_ids,
                     name,
@@ -25,7 +25,7 @@ BEGIN
                     cluster, 
                     array_agg(DISTINCT cluster_tab."name:etymology:wikidata") FILTER (WHERE cluster_tab."name:etymology:wikidata" is not null) AS "name:etymology:wikidata",
                     array_agg(DISTINCT cluster_tab.wikidata) FILTER (WHERE cluster_tab.wikidata is not null) AS wikidata,
-                    st_union(cluster_tab.geometry) AS geom
+                    ST_SetSRID(st_union(cluster_tab.geometry),3857) AS geom
                 FROM (SELECT    nullif(road.wikidata,'''') AS wikidata, 
                                 unnest(
                                     case when road."name:etymology:wikidata" = '''' then
