@@ -10,13 +10,13 @@ INSERT INTO wikidata_classes VALUES ('Q5', '{"P31","P279"}', 'human') ON CONFLIC
 INSERT INTO wikidata_classes VALUES ('Q2985549', '{"P31"}', 'mononymous person') ON CONFLICT DO NOTHING;
 INSERT INTO wikidata_classes VALUES ('Q20643955', '{"P31"}', 'human biblical figure') ON CONFLICT DO NOTHING;
 
-INSERT INTO wikidata_classes VALUES ('Q6581097', '{"P21"}', 'human (male)') ON CONFLICT DO NOTHING;
-INSERT INTO wikidata_classes VALUES ('Q15145778', '{"P21"}', 'human (male cis)') ON CONFLICT DO NOTHING;
-INSERT INTO wikidata_classes VALUES ('Q6581072', '{"P21"}', 'human (female)') ON CONFLICT DO NOTHING;
-INSERT INTO wikidata_classes VALUES ('Q15145779', '{"P21"}', 'human (female cis)') ON CONFLICT DO NOTHING;
-INSERT INTO wikidata_classes VALUES ('Q1052281', '{"P21"}', 'human (female trans)') ON CONFLICT DO NOTHING;
-INSERT INTO wikidata_classes VALUES ('Q2449503', '{"P21"}', 'human (male trans)') ON CONFLICT DO NOTHING;
-INSERT INTO wikidata_classes VALUES ('Q1097630', '{"P21"}', 'human (intersex)') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q6581097', '{"P21"}', 'gender (male)') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q15145778', '{"P21"}', 'gender (male cis)') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q6581072', '{"P21"}', 'gender (female)') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q15145779', '{"P21"}', 'gender (female cis)') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q1052281', '{"P21"}', 'gender (female trans)') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q2449503', '{"P21"}', 'gender (male trans)') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q1097630', '{"P21"}', 'gender (intersex)') ON CONFLICT DO NOTHING;
 
 INSERT INTO wikidata_classes VALUES ('Q10884', '{"P279"}', 'tree') ON CONFLICT DO NOTHING;
 
