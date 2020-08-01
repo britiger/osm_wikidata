@@ -39,7 +39,8 @@ BEGIN
                                 highway,
                                 ST_ClusterDBSCAN(geometry, eps := 100, minpoints := 1) over (PARTITION BY name) AS cluster,
                                 geometry
-                        FROM imposm_roads road) AS cluster_tab
+                        FROM imposm_roads road
+                        WHERE highway NOT IN(''platform'',''A3.0'',''rest_area'',''bus_stop'',''elevator'')) AS cluster_tab
                 WHERE name=$1
                 GROUP BY name, cluster' USING r.name;
     END LOOP;
