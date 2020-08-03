@@ -32,6 +32,8 @@ then
 	exit 1
 fi
 
+echo_time "Create basic tables and update triggers"
+psql -f sql/createBasicTables.sql > /dev/null
 echo_time "Fill table with clustered roads"
 psql -f sql/updateClusteredRoads.sql > /dev/null
 

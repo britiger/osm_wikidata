@@ -8,14 +8,13 @@ CREATE TABLE IF NOT EXISTS clustered_roads (
   geom geometry(geometry, 3857)
 );
 CREATE INDEX IF NOT EXISTS imposm_roads_name_idx ON imposm_roads (name);
-DROP INDEX IF EXISTS clustered_roads_geom_idx;
 
 DO $$DECLARE r record;
 BEGIN
     -- clean table
-    TRUNCATE TABLE clustered_roads;
+    DELETE FROM clustered_roads WHERE name IN (SELECT name FROM import_updated_roadnames);
 
-    FOR r IN SELECT DISTINCT name FROM imposm_roads WHERE name != '' AND name IS NOT NULL
+    FOR r IN SELECT name FROM import_updated_roadnames WHERE name != '' AND name IS NOT NULL
     LOOP
         -- RAISE NOTICE 'Cluster road %', r.name;
         EXECUTE 'INSERT INTO clustered_roads 
@@ -44,6 +43,9 @@ BEGIN
                 WHERE name=$1
                 GROUP BY name, cluster' USING r.name;
     END LOOP;
+
+    -- Delete processed names
+    TRUNCATE TABLE import_updated_roadnames;
 END$$;
 
 CREATE INDEX IF NOT EXISTS clustered_roads_geom_idx ON clustered_roads USING GIST (geom);
