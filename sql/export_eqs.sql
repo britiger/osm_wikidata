@@ -51,3 +51,47 @@ BEGIN
     END IF;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION eqsGetBirth(wikidataIds varchar[])
+RETURNS INT AS $$
+DECLARE
+    resultYear int;
+    curResultYear int;
+    r record;
+BEGIN
+    resultYear := NULL;
+    curResultYear := NULL;
+
+    FOR r IN SELECT substr(jsonb_array_elements(data->'claims'->'P569')->'mainsnak'->'datavalue'->'value'->>'time', 1, 5)::int AS year FROM wikidata WHERE wikidataId=ANY(wikidataIds)
+    LOOP
+        curResultYear := r.year;
+        IF resultYear IS NOT NULL AND curResultYear != resultYear THEN
+            return NULL;
+        END IF;
+        resultYear := curResultYear;
+    END LOOP;
+    return resultYear;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION eqsGetDeath(wikidataIds varchar[])
+RETURNS INT AS $$
+DECLARE
+    resultYear int;
+    curResultYear int;
+    r record;
+BEGIN
+    resultYear := NULL;
+    curResultYear := NULL;
+
+    FOR r IN SELECT substr(jsonb_array_elements(data->'claims'->'P570')->'mainsnak'->'datavalue'->'value'->>'time', 1, 5)::int AS year FROM wikidata WHERE wikidataId=ANY(wikidataIds)
+    LOOP
+        curResultYear := r.year;
+        IF resultYear IS NOT NULL AND curResultYear != resultYear THEN
+            return NULL;
+        END IF;
+        resultYear := curResultYear;
+    END LOOP;
+    return resultYear;
+END;
+$$ LANGUAGE plpgsql;

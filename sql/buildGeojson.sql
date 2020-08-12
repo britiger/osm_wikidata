@@ -11,6 +11,8 @@ SELECT name,
     wd.data->'labels' AS labels, 
     wd.data->'sitelinks' AS sitelinks,
     wd.data->'descriptions' AS descriptions,
+    eqsGetBirth("name:etymology:wikidata") AS birth,
+    eqsGetDeath("name:etymology:wikidata") AS death,
     geom AS "geometry",
     json_build_object(
         'type', 'Feature',
@@ -27,8 +29,8 @@ SELECT name,
                     'descriptions', wd.data->'descriptions',
                     -- nicknames TODO
                     'gender', eqsGetGender("name:etymology:wikidata"),
-                    -- birth TODO
-                    -- death TODO
+                    'birth', eqsGetBirth("name:etymology:wikidata"),
+                    'death', eqsGetDeath("name:etymology:wikidata"),
                     'sitelinks', wd.data->'sitelinks'
                 )
             ),
