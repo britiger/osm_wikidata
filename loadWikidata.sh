@@ -5,6 +5,10 @@
 
 wd_cache=./cache_wikidata
 
+invalid_items=./log/invalid_wikidata.log
+missing_items=./log/missing_wikidata.log
+redirect_items=./log/redirect_wikidata.log
+
 mkdir -p $wd_cache
 
 echo_time "Check tables ..."
@@ -20,6 +24,11 @@ function import_run() {
     echo_time "Cleanup tables ..."
     psql -c "TRUNCATE TABLE wikidata_import;"
 
+    # clean missing / redirect
+    > ${invalid_items}
+    > ${missing_items}
+    > ${redirect_items}
+
     echo_time "Search for missing data ..."
     psql -t -X --quiet --no-align -c "select wikidata FROM wikidata_needed_import ORDER BY wikidata" \
     | while read wikidata
@@ -28,6 +37,7 @@ function import_run() {
         if ! [[ $wikidata =~ ^Q[0-9]+$ ]]
         then
             echo_time "'${wikidata}' is not a valid wikidata entity! Skipped."
+            echo "${wikidata}" >> ${invalid_items}
             continue
         fi
 
@@ -53,6 +63,7 @@ function import_run() {
                 if grep -q "Not Found" $outfile
                 then
                     echo_time "Entity $wikidata not found, maybe deleted or invalid"
+                    echo "$wikidata" >> ${missing_items}
                 fi
                 echo_time "Reset cache"
                 rm -f $outfile
@@ -61,6 +72,7 @@ function import_run() {
             if [ "$file_id" != "$wikidata" ]
             then
                 echo_time "Found Redirect $wikidata => $file_id"
+                echo "$wikidata => $file_id" >> ${redirect_items}
                 rm -f $outfile
                 continue
             fi
