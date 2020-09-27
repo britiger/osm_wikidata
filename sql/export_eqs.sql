@@ -29,7 +29,8 @@ BEGIN
                 -- do nothing      
         END CASE;
         IF resultChar IS NOT NULL AND curResultChar != resultChar THEN
-            return NULL;
+            -- Multiple Gender
+            return '+';
         END IF;
         resultChar := curResultChar;
     END LOOP;
@@ -94,5 +95,21 @@ BEGIN
         resultYear := curResultYear;
     END LOOP;
     return resultYear;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION eqsGetImage(wikidataIds varchar[])
+RETURNS VARCHAR AS $$
+DECLARE
+    r record;
+BEGIN
+
+    FOR r IN SELECT jsonb_array_elements(data->'claims'->'P18')->'mainsnak'->'datavalue'->>'value' AS url FROM wikidata WHERE wikidataId=ANY(wikidataIds)
+    LOOP
+        IF r.url IS NOT NULL THEN
+            return r.url;
+        END IF;
+    END LOOP;
+    return NULL;
 END;
 $$ LANGUAGE plpgsql;
