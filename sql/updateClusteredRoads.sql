@@ -32,7 +32,7 @@ BEGIN
                                     case when road."name:etymology:wikidata" = '''' then
                                         ''{null}''::varchar(255)[]
                                     else
-                                        string_to_array(road."name:etymology:wikidata",'';'')
+                                        string_to_array(replace(road."name:etymology:wikidata",''; '','';''),'';'')
                                     end
                                 ) AS "name:etymology:wikidata",  
                                 osm_id, 
