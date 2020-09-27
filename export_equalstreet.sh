@@ -33,11 +33,11 @@ echo_time "Create database functions ..."
 psql -f sql/export_eqs.sql > /dev/null
 psql -f sql/buildGeojson.sql > /dev/null
 echo_time "Export $export_dir/${relation_name}_gender.csv ..."
-cat sql/export_eqs_gender.sql | sed -e "s/##RELATION##/${relation_id}/g" | psql > $export_dir/${relation_name}_gender.csv
+cat sql/export_eqs_gender.sql | sed -e "s/##RELATION##/${relation_id}/g" | psql -q > $export_dir/${relation_name}_gender.csv
 echo_time "Export $export_dir/${relation_name}_all.csv ..."
-cat sql/export_eqs_all.sql | sed -e "s/##RELATION##/${relation_id}/g" | psql > $export_dir/${relation_name}_all.csv
+cat sql/export_eqs_all.sql | sed -e "s/##RELATION##/${relation_id}/g" | psql -q > $export_dir/${relation_name}_all.csv
 echo_time "Export $export_dir/${relation_name}_other.csv ..."
-cat sql/export_eqs_other.sql | sed -e "s/##RELATION##/${relation_id}/g" | psql > $export_dir/${relation_name}_other.csv
+cat sql/export_eqs_other.sql | sed -e "s/##RELATION##/${relation_id}/g" | psql -q > $export_dir/${relation_name}_other.csv
 
 echo_time "Export $export_dir/${relation_name}_export.geojson ..."
-cat sql/export_eqs_geojson.sql | sed -e "s/##RELATION##/${relation_id}/g" | psql | sed 's/\\\\/\\/g' > $export_dir/${relation_name}_export.geojson
+cat sql/export_eqs_geojson.sql | sed -e "s/##RELATION##/${relation_id}/g" | psql -q | sed 's/\\\\/\\/g' > $export_dir/${relation_name}_export.geojson
