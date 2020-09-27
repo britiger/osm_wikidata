@@ -20,19 +20,24 @@ INSERT INTO wikidata_classes VALUES ('Q1052281', '{"P21"}', 'gender (female tran
 INSERT INTO wikidata_classes VALUES ('Q2449503', '{"P21"}', 'gender (male trans)') ON CONFLICT DO NOTHING;
 INSERT INTO wikidata_classes VALUES ('Q1097630', '{"P21"}', 'gender (intersex)') ON CONFLICT DO NOTHING;
 
+INSERT INTO wikidata_classes VALUES ('Q28640', '{"P31"}', 'profession') ON CONFLICT DO NOTHING;
+
 INSERT INTO wikidata_classes VALUES ('Q756', '{"P279"}', 'plant') ON CONFLICT DO NOTHING;
 INSERT INTO wikidata_classes VALUES ('Q10884', '{"P279"}', 'tree') ON CONFLICT DO NOTHING;
 
 INSERT INTO wikidata_classes VALUES ('Q729', '{"P279"}', 'animal') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q38829', '{"P31"}', 'animal') ON CONFLICT DO NOTHING;
 INSERT INTO wikidata_classes VALUES ('Q5113', '{"P171"}','bird') ON CONFLICT DO NOTHING;
 INSERT INTO wikidata_classes VALUES ('Q22007593', '{"P171"}','bird') ON CONFLICT DO NOTHING;
 INSERT INTO wikidata_classes VALUES ('Q5856078', '{"P171"}','bird') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q618828', '{"P171"}','butterfly') ON CONFLICT DO NOTHING;
 
 INSERT INTO wikidata_classes VALUES ('Q958314','{"P31"}','grape variety') ON CONFLICT DO NOTHING;
 
-INSERT INTO wikidata_classes VALUES ('Q486972', '{"P279"}', 'human settlement') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q486972', '{"P31","P279"}', 'human settlement') ON CONFLICT DO NOTHING;
 
 INSERT INTO wikidata_classes VALUES ('Q285451', '{"P31","P279"}', 'river system') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q23397', '{"P31"}', 'lake') ON CONFLICT DO NOTHING;
 
 -- table for subcategories
 CREATE TABLE IF NOT EXISTS wikidata_subcategories (
