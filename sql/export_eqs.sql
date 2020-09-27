@@ -1,3 +1,4 @@
+SET client_min_messages TO WARNING;
 
 CREATE OR REPLACE FUNCTION eqsGetGender(wikidataIds varchar[])
 RETURNS VARCHAR AS $$

@@ -1,3 +1,5 @@
+SET client_min_messages TO WARNING;
+
 -- CSV for gender.csv
 COPY (SELECT name, eqsGetGender("name:etymology:wikidata") AS gender, array_to_string("name:etymology:wikidata",',') AS wikidata, 'way' AS "type"
 FROM clustered_roads 

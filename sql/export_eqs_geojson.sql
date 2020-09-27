@@ -1,3 +1,5 @@
+SET client_min_messages TO WARNING;
+
 -- all.json
 COPY (SELECT 
     json_build_object(

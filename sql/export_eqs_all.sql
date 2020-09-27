@@ -1,3 +1,5 @@
+SET client_min_messages TO WARNING;
+
 CREATE OR REPLACE VIEW export_eqs_all AS 
 SELECT name, 
     eqsGetGender("name:etymology:wikidata") AS gender,

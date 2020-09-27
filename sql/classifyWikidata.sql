@@ -1,3 +1,5 @@
+SET client_min_messages TO WARNING;
+
 -- table
 CREATE TABLE IF NOT EXISTS wikidata_classes (
     wikidataId VARCHAR(128) PRIMARY KEY,

@@ -1,3 +1,5 @@
+SET client_min_messages TO WARNING;
+
 -- Table to store names of roads which are updated
 CREATE TABLE IF NOT EXISTS import_updated_roadnames (
     name VARCHAR(255) UNIQUE

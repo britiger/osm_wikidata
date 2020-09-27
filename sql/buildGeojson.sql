@@ -1,3 +1,5 @@
+SET client_min_messages TO WARNING;
+
 -- Function and Views to build an export geojson
 
 -- View for build equalstreetnames feature
