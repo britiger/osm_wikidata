@@ -40,7 +40,7 @@ EOL
 }
 
 function get_osm() {
-    psql -t -X --quiet --no-align -c "select array_to_string(osm_ids,','),name FROM clustered_roads WHERE '$1'=any(wikidata) OR '$1'=any(\"name:etymology:wikidata\")" \
+    psql -t -X --quiet --no-align -c "SELECT array_to_string(osm_ids,','),name FROM clustered_roads WHERE '$1'=any(wikidata) OR '$1'=any(\"name:etymology:wikidata\")" \
     | while read line
     do
         elements=${line%\|*}
@@ -63,6 +63,18 @@ function get_osm() {
 
         echo "</ul>" >> ${outfile}
         echo "<a href=\"http://localhost:8111/load_object?objects=${josm_list:1}&relation_members=true\">Edit in JOSM</a>" >> ${outfile}
+    done
+}
+
+function get_wikidata() {
+    psql -t -X --quiet --no-align -c "SELECT wikidataSource, wikidataSourceName FROM wikidata_depenencies WHERE wikidataId='$1'" \
+    | while read line
+    do
+        wikidataId=${line%\|*}
+        name=${line#*\|}
+        
+        echo "<h4>wikidata: ${name} (<a href=\"https://wikidata.org/wiki/${wikidataId}\">${wikidataId}</a>)</h4>" >> ${outfile}
+
     done
 }
 
@@ -105,6 +117,7 @@ function redirect_report() {
         to=`echo ${line} | cut -f3 -d" "`
         echo "<h3>Value: <a href=\"https://wikidata.org/wiki/$from\">$from</a> (redirects to <a href=\"https://wikidata.org/wiki/$to\">$to</a>)</h3>" >> ${outfile}
         get_osm ${from}
+        get_wikidata ${from}
         # to show a process
         echo -n "."
     done < ${redirect_items}
