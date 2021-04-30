@@ -30,9 +30,16 @@ function import_run() {
     > ${redirect_items}
 
     echo_time "Search for missing data ..."
+    count_missing=`psql -t -X --quiet --no-align -c "select count(*) FROM wikidata_needed_import"`
+    missing_current=0
+    echo_time "Missing ${count_missing} items"
     psql -t -X --quiet --no-align -c "select wikidata FROM wikidata_needed_import ORDER BY wikidata" \
     | while read wikidata
     do
+        # Counter
+        missing_current=$((missing_current+1))
+        echo_time "Item ${missing_current}/${count_missing}"
+
         # regex check
         if ! [[ $wikidata =~ ^Q[0-9]+$ ]]
         then
