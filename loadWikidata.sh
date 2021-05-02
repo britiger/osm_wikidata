@@ -67,7 +67,7 @@ function import_run() {
             file_id_ret=$?
             if [ $file_id_ret -ne 0 ]
             then
-                if grep -q "Not Found" $outfile
+                if grep -q "Not Found" $outfile || grep -q "Invalid ID" $outfile
                 then
                     echo_time "Entity $wikidata not found, maybe deleted or invalid"
                     echo "$wikidata" >> ${missing_items}
