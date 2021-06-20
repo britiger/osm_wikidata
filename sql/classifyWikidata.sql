@@ -34,6 +34,7 @@ INSERT INTO wikidata_classes VALUES ('Q618828', '{"P171"}','butterfly') ON CONFL
 
 INSERT INTO wikidata_classes VALUES ('Q958314','{"P31"}','grape variety') ON CONFLICT DO NOTHING;
 
+INSERT INTO wikidata_classes VALUES ('Q6256', '{"P31","P279"}', 'country') ON CONFLICT DO NOTHING;
 INSERT INTO wikidata_classes VALUES ('Q486972', '{"P31","P279"}', 'human settlement') ON CONFLICT DO NOTHING;
 
 INSERT INTO wikidata_classes VALUES ('Q285451', '{"P31","P279"}', 'river system') ON CONFLICT DO NOTHING;
