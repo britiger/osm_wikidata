@@ -38,6 +38,7 @@ INSERT INTO wikidata_classes VALUES ('Q6256', '{"P31","P279"}', 'country') ON CO
 INSERT INTO wikidata_classes VALUES ('Q486972', '{"P31","P279"}', 'human settlement') ON CONFLICT DO NOTHING;
 
 INSERT INTO wikidata_classes VALUES ('Q285451', '{"P31","P279"}', 'river system') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q4022', '{"P31","P279"}', 'river system') ON CONFLICT DO NOTHING;
 INSERT INTO wikidata_classes VALUES ('Q23397', '{"P31"}', 'lake') ON CONFLICT DO NOTHING;
 
 -- table for subcategories
