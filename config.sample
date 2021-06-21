@@ -5,6 +5,7 @@ export PGPORT=5432
 export PGUSER=osm
 export PGPASSWORD=osm
 export PGDATABASE=osm_etymology
+export BAREMAPS=NO
 
 cache_dir=./cache
 diff_dir=./diff
