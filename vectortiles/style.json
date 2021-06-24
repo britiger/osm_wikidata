@@ -27,7 +27,12 @@
       "type": "vector",
       "url": "http://localhost:3000/spec.json"
     },
-    "wikidata": {"type": "vector", "url": "http://localhost:3000/spec2.json"}
+    "wikidata": {
+      "type": "vector", 
+      "tiles": [
+        "http://localhost:9009/{z}/{x}/{y}.pbf"
+      ]
+    }
   },
   "sprite": "http://localhost:3000/sprite",
   "glyphs": "http://localhost:3000/fonts/{fontstack}/{range}.pbf",
