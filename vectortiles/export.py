@@ -4,6 +4,7 @@ import os
 import gzip
 import psycopg2
 from tqdm import tqdm
+from multiprocessing import Pool, RLock
 
 # Database connection from enviroment
 DATABASE = {
@@ -107,10 +108,11 @@ def exportTile(tile):
     tilesFile.close()
 
 
-def exportTiles():
+def exportTiles(for_zoom, process_pos):
     global database_connection
     
-    sql = "SELECT zoom, x, y FROM import_updated_zyx WHERE zoom<100 ORDER by zoom,x,y" 
+    sql = "SELECT zoom, x, y FROM import_updated_zyx WHERE zoom="+str(for_zoom)+" ORDER by zoom,x,y" 
+    tqdm_text = "Level {}".format(for_zoom).zfill(2)
 
     dbConnection()
     with database_connection.cursor() as cur, database_connection.cursor() as cur_del:
@@ -124,7 +126,8 @@ def exportTiles():
             return
         row = cur.fetchone()
         last_zoom=row[0]
-        for i in tqdm(range(rowcount)):
+        pbar = tqdm(total=rowcount, desc=tqdm_text, position=(process_pos*2)+1, unit='tiles')
+        for i in range(rowcount):
         # do something with row
             if last_zoom != row[0]:
                 print("Zoom Level "+str(last_zoom)+" completed. Start exporting zoom level "+ str(row[0]))
@@ -135,5 +138,18 @@ def exportTiles():
             cur_del.execute("DELETE FROM import_updated_zyx WHERE zoom = %s AND x = %s AND y = %s", (row[0],row[1],row[2]))
             database_connection.commit()
             row = cur.fetchone()
+            pbar.update(1)
 
-exportTiles()
+def main():
+    from_zoom = 9
+    to_zoom = 14
+    num_processes = to_zoom-from_zoom+1
+
+    pool = Pool(processes=num_processes, initargs=(RLock(),), initializer=tqdm.set_lock)
+    jobs = [pool.apply_async(exportTiles, args=(z, z-from_zoom)) for z in range(from_zoom, to_zoom+1)]
+    pool.close()
+    result_list = [job.get() for job in jobs]
+    print ("\n" * (num_processes*2))
+
+if __name__ == "__main__":
+    main()
