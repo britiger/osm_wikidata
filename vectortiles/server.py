@@ -1,16 +1,15 @@
 import http.server
-import socketserver
 import re
+import os
 import psycopg2
-import json
 
 # Database to connect to
 DATABASE = {
-    'user':     'osm',
-    'password': 'osm',
-    'host':     'localhost',
-    'port':     '5435',
-    'database': 'osm_etymology'
+    'user':     os.getenv('PGUSER', 'osm'),
+    'password': os.getenv('PGPASSWORD', 'osm'),
+    'host':     os.getenv('PGHOST', 'localhost'),
+    'port':     os.getenv('PGPORT', '5432'),
+    'database': os.getenv('PGDATABASE', 'osm_etymology')
     }
 
 # Table to query for MVT data, and columns to
@@ -129,8 +128,8 @@ class TileRequestHandler(http.server.BaseHTTPRequestHandler):
         sql = self.envelopeToSQL(tile)
         pbf = self.sqlToPbf(sql)
 
-        self.log_message("path: %s\ntile: %s" % (self.path, tile))
-        self.log_message("sql: %s" % (sql))
+        # self.log_message("path: %s\ntile: %s" % (self.path, tile))
+        # self.log_message("sql: %s" % (sql))
         
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -143,7 +142,7 @@ class TileRequestHandler(http.server.BaseHTTPRequestHandler):
 ########################################################################
 
 
-with http.server.HTTPServer((HOST, PORT), TileRequestHandler) as server:
+with http.server.ThreadingHTTPServer((HOST, PORT), TileRequestHandler) as server:
     try:
         print("serving at port", PORT)
         server.serve_forever()

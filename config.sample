@@ -5,7 +5,7 @@ export PGPORT=5432
 export PGUSER=osm
 export PGPASSWORD=osm
 export PGDATABASE=osm_etymology
-export BAREMAPS=NO
+export TILES_EXPORT_PATH=/var/www/html/wikidata/tiles/wikidata/
 
 cache_dir=./cache
 diff_dir=./diff

@@ -31,7 +31,9 @@
       "type": "vector", 
       "tiles": [
         "http://localhost:9009/{z}/{x}/{y}.pbf"
-      ]
+      ],
+      "maxzoom": 14,
+      "minzoom": 9
     }
   },
   "sprite": "http://localhost:3000/sprite",

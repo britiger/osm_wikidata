@@ -67,7 +67,10 @@
 				html += "</h2>";
 				if(prop["name:etymology:wikidata"]) {
 					var wikidata = JSON.parse(prop["name:etymology:wikidata"]);
-					var name = JSON.parse(prop["name:etymology:wikidata:name"])
+					var name = ['??'];
+					if(prop["name:etymology:wikidata:name"]) {
+						name = JSON.parse(prop["name:etymology:wikidata:name"]);
+					}
 					var gender = "";
 					if(prop["name:etymology:wikidata:gender"]) {
 						gender = " ("+prop["name:etymology:wikidata:gender"]+")";
