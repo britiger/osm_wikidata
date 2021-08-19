@@ -3,6 +3,9 @@
 . ./config 
 . ./tools/bash_functions.sh
 
+# Add views and functions
+psql -f sql/vectorTilesViews.sql > /dev/null
+
 echo_time "Calculate needed Tiles ..."
 psql -f sql/calculateTiles.sql > /dev/null
 
