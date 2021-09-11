@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Wikidata etymology</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+	<link rel="stylesheet" href="leaflet.css" />
+    <script src="leaflet.js"></script>
+	<link href="maplibre-gl.css" rel='stylesheet' />
+	<script src="maplibre-gl.js"></script>
+	<script src="leaflet-maplibre-gl.js"></script>
+    <style>
+			html, body, #map {
+			  width: 100%;
+			  height: 100%;
+			  margin: 0;
+			}
+
+			#wikidata {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				width: 25%;
+				overflow: auto;
+				background: rgba(255, 255, 255, 0.8);
+				z-index: 1000;
+				padding: 1em;
+				margin: 1em;
+			}
+		  </style>
+</head>
+<body>
+
+<div id='map'></div>
+<div id="wikidata"><h2>Wikidata</h2> Click on a colored street.</pre>
+<script>
+	var map = L.map('map').setView([52.4, 13.4], 12);
+	
+	var gl = L.maplibreGL({
+		style: window.location.protocol+'//'+window.location.host+'/style.json',
+		interactive: true,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
+
+	var maplibreMap = gl.getMaplibreMap();
+
+	maplibreMap.on('load', () => {
+		console.log('map loaded');
+
+		maplibreMap.on('click', function (e) {
+			var etymology = maplibreMap.queryRenderedFeatures(e.point, {
+				layers: ['etymology_missing','etymology_other','etymology_human_f','etymology_human_m']
+			});
+			 
+			if (etymology.length > 0) {
+				var prop = etymology[0].properties;
+				var html = '';
+				console.log(prop);
+				html = "<h2>"+prop["name"];
+				if(prop["wikidata"]) {
+					var wikidata = JSON.parse(prop["wikidata"]);
+					html += " (";
+					wikidata.forEach((wd) => {html += "<a href='https://www.wikidata.org/wiki/"+wd+"' target='_blank'>"+wd+"</a> ";});
+					html += ")";
+				}
+				html += "</h2>";
+				if(prop["name:etymology:wikidata"]) {
+					var wikidata = JSON.parse(prop["name:etymology:wikidata"]);
+					var name = ['??'];
+					if(prop["name:etymology:wikidata:name"]) {
+						name = JSON.parse(prop["name:etymology:wikidata:name"]);
+					}
+					var gender = "";
+					if(prop["name:etymology:wikidata:gender"]) {
+						gender = " ("+prop["name:etymology:wikidata:gender"]+")";
+					}
+					html += "<h3>";
+					wikidata.forEach((wd) => {html += "<a href='https://www.wikidata.org/wiki/"+wd+"' target='_blank'>"+wd+"</a> ";});
+					html += ": ";
+					name.forEach((n) => {html += n+" ";});
+					html += gender + "</h3>"
+				} else {
+					html += "<p>No Tag <a href='https://wiki.openstreetmap.org/wiki/Key:name:etymology:wikidata' target='_blank'>name:etymology:wikidata</a> found.</p>"
+				}
+				
+				if(prop["name:etymology:wikidata:description"]) {
+					var description = JSON.parse(prop["name:etymology:wikidata:description"]);
+					description.forEach((desc) => {html += "<p>"+desc+"</p>"});
+				}
+
+				if(prop["name:etymology:wikidata:birth"]) {
+					html += "<p>"+prop["name:etymology:wikidata:birth"]+"-"+prop["name:etymology:wikidata:death"]+"</p>";
+				}
+
+				if(prop["name:etymology:wikidata:classification"]) {
+					html += "<p>Classification: "+prop["name:etymology:wikidata:classification"]+"</p>";
+				}
+
+				
+				if (prop["osm_ids"]) {
+					var osm_ids = JSON.parse(prop["osm_ids"]);
+					html += "<p><a href='https://openstreetmap.org/way/"+osm_ids[0]+"' target='_blank'>Show on osm.org</a>"
+					var josm_link = 'http://localhost:8111/load_object?objects=';
+					osm_ids.forEach((osm_id) => {
+						if (osm_id > 0) {
+							josm_link += "w"+osm_id+",";
+						}else{
+							josm_link += "r"+(osm_id*-1)+",";
+						}
+					});
+					html += " | <a href='"+josm_link+"' target='_blank'>Edit in JOSM</a></p>"
+				}
+
+				document.getElementById('wikidata').innerHTML = html;
+			} 
+		});
+	});
+</script>
+
+</body>
+</html>

@@ -5,26 +5,43 @@ CREATE TABLE IF NOT EXISTS import_updated_roadnames (
     name VARCHAR(255) UNIQUE
 );
 
+CREATE TABLE IF NOT EXISTS import_updated_geoms (
+    bbox box2d
+);
+
+CREATE TABLE IF NOT EXISTS import_updated_zyx (
+    zoom smallint NOT NULL,
+    x int NOT NULL,
+    y int NOT NULL,
+    UNIQUE (zoom, x, y)
+);
+
 -- if create update all names
 INSERT INTO import_updated_roadnames
 SELECT DISTINCT name FROM imposm_roads
 ON CONFLICT DO NOTHING;
 
+INSERT INTO import_updated_geoms
+SELECT ST_Extent(geometry) FROM imposm_admin;
+
 -- create trigger for updates
 CREATE OR REPLACE FUNCTION update_roadnames() RETURNS trigger AS
 $$
 BEGIN
-	IF (TG_OP = 'DELETE') THEN
-		INSERT INTO import_updated_roadnames (name) VALUES (OLD.name) ON CONFLICT DO NOTHING;
-		RETURN OLD;
-	ELSIF (TG_OP = 'UPDATE') THEN
-		INSERT INTO import_updated_roadnames (name) VALUES (OLD.name) ON CONFLICT DO NOTHING;
+    IF (TG_OP = 'DELETE') THEN
+        INSERT INTO import_updated_roadnames (name) VALUES (OLD.name) ON CONFLICT DO NOTHING;
+        INSERT INTO import_updated_geoms (bbox) VALUES (box2d(OLD.geometry)) ON CONFLICT DO NOTHING;
+        RETURN OLD;
+    ELSIF (TG_OP = 'UPDATE') THEN
+        INSERT INTO import_updated_roadnames (name) VALUES (OLD.name) ON CONFLICT DO NOTHING;
         INSERT INTO import_updated_roadnames (name) VALUES (NEW.name) ON CONFLICT DO NOTHING;
-		RETURN NEW;
-	ELSIF (TG_OP = 'INSERT') THEN
-		INSERT INTO import_updated_roadnames (name) VALUES (NEW.name) ON CONFLICT DO NOTHING;
-		RETURN NEW;
-	END IF;
+        INSERT INTO import_updated_geoms (bbox) VALUES (box2d(ST_Union(OLD.geometry,NEW.geometry))) ON CONFLICT DO NOTHING;
+        RETURN NEW;
+    ELSIF (TG_OP = 'INSERT') THEN
+        INSERT INTO import_updated_roadnames (name) VALUES (NEW.name) ON CONFLICT DO NOTHING;
+        INSERT INTO import_updated_geoms (bbox) VALUES (box2d(NEW.geometry)) ON CONFLICT DO NOTHING;
+        RETURN NEW;
+    END IF;
 END
 $$
 LANGUAGE plpgsql 
