@@ -41,6 +41,9 @@ INSERT INTO wikidata_classes VALUES ('Q285451', '{"P31","P279"}', 'river system'
 INSERT INTO wikidata_classes VALUES ('Q4022', '{"P31","P279"}', 'river system') ON CONFLICT DO NOTHING;
 INSERT INTO wikidata_classes VALUES ('Q23397', '{"P31"}', 'lake') ON CONFLICT DO NOTHING;
 
+INSERT INTO wikidata_classes VALUES ('Q44', '{"P31","P279"}', 'beer') ON CONFLICT DO NOTHING;
+INSERT INTO wikidata_classes VALUES ('Q1998962', '{"P31"}', 'beer style') ON CONFLICT DO NOTHING;
+
 -- table for subcategories
 CREATE TABLE IF NOT EXISTS wikidata_subcategories (
     propertyId VARCHAR(128) PRIMARY KEY

@@ -46,7 +46,8 @@ BEGIN
         SELECT jsonb_array_elements(data->'claims'->prop)->'mainsnak'->'datavalue'->'value'->>'id' as depId
             FROM wikidata 
             INNER JOIN (SELECT propertyId AS prop FROM wikidata_subcategories) AS props ON TRUE
-        WHERE wikidataId=i_wikidataId
+        WHERE wikidataId=i_wikidataId 
+          AND wikidataId NOT IN('Q219160','Q173853') -- block Q5 - human for specific Ids
     )
     INSERT INTO wikidata_class_links
     SELECT wcl.wikidataIdClass, i_wikidataId AS wikidataIdEntity, wcl.wikidataProperty
