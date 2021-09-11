@@ -12,8 +12,8 @@ redirect_items=./log/redirect_wikidata.log
 mkdir -p $wd_cache
 
 echo_time "Check tables ..."
-psql -f sql/createWikiTables.sql > /dev/null
 psql -f sql/classifyWikidata.sql > /dev/null
+psql -f sql/createWikiTables.sql > /dev/null
 
 function db_import() {
     wikidata=$1
